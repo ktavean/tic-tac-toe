@@ -1,0 +1,28 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#container {
+    display: flex;
+    justify-content: center;
+    width: 100vw;
+    height: 100%;
+}
+
+#gameboard {
+    display: grid;
+    grid-template-columns: repeat(3, 0.5fr);
+    grid-template-rows: repeat(3, 0.5fr);
+}
+
+#gameboard button {
+    width: 5rem;
+    height: 5rem;
+    cursor: pointer;
+    /* border: 0; */
+}
+
+.disabled {
+    pointer-events: none;
+}
