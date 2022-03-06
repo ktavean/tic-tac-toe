@@ -15,7 +15,7 @@ const gameBoard = (() => {
     ];
     for (let btn of buttons) {
         btn.addEventListener("click", (e) => {
-            displayBoard.displaySymbol(e);                     // add event to buttons on click to display the symbol
+            display.displaySymbol(e);                     // add event to buttons on click to display the symbol
         });
     }
     const resetGame = () => {
@@ -36,9 +36,9 @@ const gameBoard = (() => {
             }
         return symbol;
     }
-    return { buttons, gameBoardArray, resetGame, changeTurn }
+    return { buttons, gameBoardArray, resetGame, changeTurn, player1, player2 }
 })();
-const displayBoard = (() => {
+const display = (() => {
     const displaySymbol = (e) => {
         let symbol = gameBoard.changeTurn();
         switch (e.target.id) {
@@ -73,7 +73,11 @@ const displayBoard = (() => {
         e.target.innerText = symbol;
         e.target.classList.add("disabled");
         if (pickWinner(symbol)) {                               // pickwinner returns true as seen below. easy way to check if someone won.
-            alert(`${symbol} wins`)
+            if (gameBoard.player1.playerSymbol === symbol) {
+                alert(`${gameBoard.player1.playerName} wins`)
+            } else {
+                alert(`${gameBoard.player2.playerName} wins`)
+            }
             gameBoard.resetGame();
         };
     }
