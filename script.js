@@ -161,7 +161,8 @@ const display = (() => {
         } else if (gameBoard.gameBoardArray[6].includes(symbol) && gameBoard.gameBoardArray[7].includes(symbol) && gameBoard.gameBoardArray[8].includes(symbol)) {
             return true;
         } else if (checkForDraw()) {
-            return alert("draw");
+            gameBoard.h2Winner.innerText = `Draw!`;
+            gameBoard.stopGame();
         } else {
             return false;
         }
