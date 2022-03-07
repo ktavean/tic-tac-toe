@@ -7,6 +7,7 @@ const gameBoard = (() => {
     }                                                           // making a player constructor
     const player1 = Player("Jeff", true, "X")                // instantiate players
     const player2 = Player("Michael", false, "0")
+    let body = document.querySelector("body");
     let playerinputs = document.querySelectorAll("input");
     let csymbol = document.querySelector("#csymbol");
     let resetBtn = document.querySelector("#reset");
@@ -57,6 +58,7 @@ const gameBoard = (() => {
         }
         newGameBtn.addEventListener("click", resetGame);
         winnerPrompt.classList.toggle("hidden");
+        body.classList.add("inactive");
     }
     const resetGame = () => {
         for (let i = 0; i < buttons.length; i++) {
@@ -70,6 +72,7 @@ const gameBoard = (() => {
         if (resetBtn.classList.contains("disabled")) {
             resetBtn.classList.remove("disabled");
             winnerPrompt.classList.toggle("hidden");
+            body.classList.remove("inactive");
         }
     }
     resetBtn.addEventListener("click", resetGame);
