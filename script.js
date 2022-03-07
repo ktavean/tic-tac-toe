@@ -13,15 +13,24 @@ const gameBoard = (() => {
         [], [], [],                                         // crazy 3d array :O
         [], [], []
     ];
-    for (let btn of buttons) {
-        btn.addEventListener("click", (e) => {
+    for (let i = 0; i < buttons.length-1; i++) {
+        buttons[i].addEventListener("click", (e) => {
             display.displaySymbol(e);                     // add event to buttons on click to display the symbol
         });
     }
     const resetGame = () => {
-        for (let btn of buttons) {                             // disable all buttons when using resetGame()
-            btn.classList.add("disabled");
+        for (let i = 0; i < buttons.length-1; i++) {                             // disable all buttons when using resetGame()
+            buttons[i].classList.add("disabled");
         }
+        let resetBtn = document.querySelector("#reset");
+        resetBtn.addEventListener("click", () => {
+            for (let i = 0; i < buttons.length-1; i++) {
+                buttons[i].innerText = "";
+                buttons[i].classList.remove("disabled");
+                gameBoardArray[i].pop();
+            }
+        })
+        
     }
     const changeTurn = () => {
         let symbol = null;
