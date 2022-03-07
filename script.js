@@ -3,50 +3,91 @@ const gameBoard = (() => {
         const playerName = name;
         const playerTurn = turn;
         const playerSymbol = symbol;
-        return {playerName, playerTurn, playerSymbol}
+        return { playerName, playerTurn, playerSymbol }
     }                                                           // making a player constructor
-    const player1 = Player("Jeff", true, "X")
-    const player2 = Player("Michael", false, "0")               // instantiate players
-    let buttons = document.querySelectorAll("button");
+    const player1 = Player("Jeff", true, "X")                // instantiate players
+    const player2 = Player("Michael", false, "0")
+    let playerinputs = document.querySelectorAll("input");
+    let csymbol = document.querySelector("#csymbol");
+    let resetBtn = document.querySelector("#reset");
+    let newGameBtn = document.querySelector("#newgame");
+    let winnerPrompt = document.querySelector("#winnerprompt");
+    let h2Winner = document.querySelector("#winner");
+    csymbol.addEventListener("click", () => {
+        if (player1.playerSymbol === "X") {
+            csymbol.innerText = "Current symbol: O";
+            csymbol.value = "O";
+            player1.playerSymbol = "O";
+            player2.playerSymbol = "X"
+        } else {
+            csymbol.innerText = "Current symbol: X";
+            csymbol.value = "X";
+            player1.playerSymbol = "X";
+            player2.playerSymbol = "O";
+        }
+    })
+    playerinputs[0].addEventListener("input", (e) => {
+        player1.playerName = e.target.value;
+    })
+    playerinputs[1].addEventListener("input", (e) => {
+        player2.playerName = e.target.value;
+    })
+    let buttons = document.querySelectorAll("#gameboard button");
     let gameBoardArray = [
         [], [], [],
         [], [], [],                                         // crazy 3d array :O
         [], [], []
     ];
-    for (let i = 0; i < buttons.length-1; i++) {
+    for (let i = 0; i < buttons.length; i++) {
         buttons[i].addEventListener("click", (e) => {
-            display.displaySymbol(e);                     // add event to buttons on click to display the symbol
+            display.displaySymbol(e);                           // add event to buttons on click to display the symbol
+            if (!csymbol.classList.contains("disabled")) {
+                csymbol.classList.add("disabled");
+            }
+            if (!playerinputs[0].classList.contains("disabled") && !playerinputs[1].classList.contains("disabled")) {
+                playerinputs[0].classList.add("disabled");
+                playerinputs[1].classList.add("disabled");
+            }
         });
     }
-    const resetGame = () => {
-        for (let i = 0; i < buttons.length-1; i++) {                             // disable all buttons when using resetGame()
+    const stopGame = () => {
+        for (let i = 0; i < buttons.length; i++) {                             // disable all buttons when using resetGame()
             buttons[i].classList.add("disabled");
+            resetBtn.classList.add("disabled");
         }
-        let resetBtn = document.querySelector("#reset");
-        resetBtn.addEventListener("click", () => {
-            for (let i = 0; i < buttons.length-1; i++) {
-                buttons[i].innerText = "";
-                buttons[i].classList.remove("disabled");
-                gameBoardArray[i].pop();
-            }
-        })
-        
+        newGameBtn.addEventListener("click", resetGame);
+        winnerPrompt.classList.toggle("hidden");
     }
+    const resetGame = () => {
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].innerText = "";
+            buttons[i].classList.remove("disabled");
+            gameBoardArray[i].pop();
+        }
+        csymbol.classList.remove("disabled");
+        playerinputs[0].classList.remove("disabled");
+        playerinputs[1].classList.remove("disabled");
+        if (resetBtn.classList.contains("disabled")) {
+            resetBtn.classList.remove("disabled");
+            winnerPrompt.classList.toggle("hidden");
+        }
+    }
+    resetBtn.addEventListener("click", resetGame);
     const changeTurn = () => {
         let symbol = null;
-            if (player1.playerTurn) {                       // simple way to determine who's turn it is. click-based and ez.
-                symbol = player1.playerSymbol;
-                player1.playerTurn = false;
-                player2.playerTurn = true;
-            } else {
-                symbol = player2.playerSymbol;
-                player1.playerTurn = true;
-                player2.playerTurn = false;
-            }
+        if (player1.playerTurn) {                       // simple way to determine who's turn it is. click-based and ez.
+            symbol = player1.playerSymbol;
+            player1.playerTurn = false;
+            player2.playerTurn = true;
+        } else {
+            symbol = player2.playerSymbol;
+            player1.playerTurn = true;
+            player2.playerTurn = false;
+        }
         return symbol;
     }
-    return { buttons, gameBoardArray, resetGame, changeTurn, player1, player2 }
-})();
+    return { buttons, gameBoardArray, stopGame, changeTurn, player1, player2, h2Winner }
+}) ();
 const display = (() => {
     const displaySymbol = (e) => {
         let symbol = gameBoard.changeTurn();
@@ -83,11 +124,11 @@ const display = (() => {
         e.target.classList.add("disabled");
         if (pickWinner(symbol)) {                               // pickwinner returns true as seen below. easy way to check if someone won.
             if (gameBoard.player1.playerSymbol === symbol) {
-                alert(`${gameBoard.player1.playerName} wins`)
+                gameBoard.h2Winner.innerText = `Congrats ${gameBoard.player1.playerName}! You win!`;
             } else {
-                alert(`${gameBoard.player2.playerName} wins`)
+                gameBoard.h2Winner.innerText = `Congrats ${gameBoard.player2.playerName}! You win!`;
             }
-            gameBoard.resetGame();
+            gameBoard.stopGame();
         };
     }
     const checkForDraw = () => {

@@ -7,6 +7,17 @@
     </head>
     <body>
         <div id="container">
+            <div id="top-part">
+                <label for="p1name">Player 1's name: </label>
+                <input type="text" name="p1name" id="p1name">
+                <button type="button" id="csymbol">Current symbol: X</button>
+                <label for="p2name">Player 2's name:</label>
+                <input type="text" name="p2name" id="p2name">
+            </div>
+            <div class="hidden" id="winnerprompt">
+                <h2 id="winner">Congrats</h2>
+                <button type="button" id="newgame">New game</button>
+            </div>
             <div id="gameboard">
                 <button id="top-left" type="button"></button>
                 <button id="top-mid" type="button"></button>
